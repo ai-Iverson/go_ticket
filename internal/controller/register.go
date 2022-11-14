@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	v1 "go_ticket/api/v1"
 	"go_ticket/internal/model"
 	"go_ticket/internal/service"
@@ -14,7 +13,6 @@ var Register = cRegister{}
 type cRegister struct{}
 
 func (c *cRegister) Register(ctx context.Context, req *v1.RegisterDoReq) (res *v1.RegisterDoRes, err error) {
-	fmt.Println("xxxx")
 	if err = service.User().Register(ctx, model.UserRegisterInput{
 		Name:     req.Name,
 		Password: req.Password,
