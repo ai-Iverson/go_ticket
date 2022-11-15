@@ -9,5 +9,4 @@ type RegisterDoReq struct {
 }
 
 type RegisterDoRes struct {
-	Referer string `json:"referer" dc:"引导客户端跳转地址"`
 }

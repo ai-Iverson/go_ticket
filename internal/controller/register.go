@@ -19,8 +19,5 @@ func (c *cRegister) Register(ctx context.Context, req *v1.RegisterDoReq) (res *v
 	}); err != nil {
 		return
 	}
-	v := &v1.RegisterDoRes{
-		Referer: "123",
-	}
-	return v, err
+	return nil, err
 }
