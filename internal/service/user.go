@@ -7,11 +7,14 @@ package service
 import (
 	"context"
 	"go_ticket/internal/model"
+	"go_ticket/internal/model/entity"
 )
 
 type IUser interface {
 	Register(ctx context.Context, in model.UserRegisterInput) error
 	EncryptPassword(password string) string
+	Login(ctx context.Context, in model.UserLoginInput) (user *entity.User, err error)
+	GetUserByNameAndPassword(ctx context.Context, name, password string) (user *entity.User, err error)
 }
 
 var localUser IUser
