@@ -22,6 +22,7 @@ var (
 				group.Bind(
 					controller.Hello,
 					controller.Register,
+					controller.Login,
 				)
 			})
 			s.Run()
