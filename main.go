@@ -1,10 +1,10 @@
 package main
 
 import (
-	_ "go_ticket/internal/packed"
-
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	"github.com/gogf/gf/v2/os/gctx"
 	_ "go_ticket/internal/logic"
+	_ "go_ticket/internal/packed"
 
 	"go_ticket/internal/cmd"
 )

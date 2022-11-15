@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	v1 "go_ticket/api/v1"
+	"go_ticket/api/v1"
 	"go_ticket/internal/model"
 	"go_ticket/internal/service"
 )
@@ -19,5 +19,8 @@ func (c *cRegister) Register(ctx context.Context, req *v1.RegisterDoReq) (res *v
 	}); err != nil {
 		return
 	}
-	return nil, err
+	v := &v1.RegisterDoRes{
+		Referer: "123",
+	}
+	return v, err
 }

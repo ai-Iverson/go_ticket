@@ -3,9 +3,20 @@ server:
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
 
-logger:
-  level : "all"
-  stdout: true
+  # Database.
+database:
+  logger:
+    level:   "all"
+    stdout:  true
+
+  default:
+    host: "127.0.0.1"
+    port: "3307"
+    user: "root"
+    pass: "123456"
+    name: "go_ticket"
+    type: "mysql"
+    updatedAt: "updated_at"
 
 
 

@@ -8,4 +8,6 @@ type RegisterDoReq struct {
 	Password string `json:"password"`
 }
 
-type RegisterDoRes struct{}
+type RegisterDoRes struct {
+	Referer string `json:"referer" dc:"引导客户端跳转地址"`
+}
