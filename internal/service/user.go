@@ -11,6 +11,7 @@ import (
 
 type IUser interface {
 	Register(ctx context.Context, in model.UserRegisterInput) error
+	EncryptPassword(password string) string
 }
 
 var localUser IUser

@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/util/gconv"
 	"go_ticket/internal/dao"
@@ -27,7 +28,13 @@ func (s *sUser) Register(ctx context.Context, in model.UserRegisterInput) error 
 		if err := gconv.Struct(in, &user); err != nil {
 			return err
 		}
+		user.Password = s.EncryptPassword(user.Password)
 		_, err := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
 		return err
 	})
+}
+
+// EncryptPassword 密码进行加密
+func (s *sUser) EncryptPassword(password string) string {
+	return gmd5.MustEncrypt(password)
 }
