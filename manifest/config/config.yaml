@@ -1,13 +1,13 @@
 server:
-  address:     ":8000"
+  address: ":8000"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
 
   # Database.
 database:
   logger:
-    level:   "all"
-    stdout:  true
+    level: "all"
+    stdout: true
 
   default:
     host: "127.0.0.1"
@@ -18,5 +18,14 @@ database:
     type: "mysql"
     updatedAt: "updated_at"
 
+token:
+  timeout: 600000  # 单位：毫秒,10分钟
+  cacheMode: 2  # 使用的缓存模式，1为内存模式，2为redis模式，默认为1
 
 
+# Redis数据库配置
+redis:
+  default:
+    address: "192.168.212.117:6379"
+    db: 0
+    pass: "7a38d7c46ca4798c7767"
