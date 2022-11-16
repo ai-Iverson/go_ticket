@@ -26,6 +26,5 @@ token:
 # Redis数据库配置
 redis:
   default:
-    address: "192.168.212.117:6379"
+    address: "172.0.0.1:6379"
     db: 0
-    pass: "7a38d7c46ca4798c7767"
