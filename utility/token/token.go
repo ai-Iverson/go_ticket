@@ -7,6 +7,9 @@ import (
 	"github.com/gogf/gf/v2/encoding/gbase64"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/text/gstr"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gogf/gf/v2/util/guid"
 	"go_ticket/internal/errorcode"
 	"strings"
@@ -117,4 +120,90 @@ func (m *MyToken) EncryptToken(ctx context.Context, userKey string) (*MyRequestT
 		Uuid:    uuid,
 		Token:   gbase64.EncodeToString(token),
 	}, nil
+}
+
+/**
+* decrypToken
+*  @Description: 解密token。token的生成规则是base64(gaes.Encrypt(base64(userKey)+TokenDelimiter+uuid))
+*  @return *MyRequestToken
+*  @return error
+ */
+func (m *MyToken) decrypToken(ctx context.Context, token string) (*MyRequestToken, error) {
+	if token == "" {
+		return nil, errorcode.NewMyErr(ctx, errorcode.TokenEmpty)
+	}
+	token64, err := gbase64.Decode([]byte(token))
+	if err != nil {
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, token, err)
+	}
+	decryptTokenStr, err := gaes.Decrypt(token64, []byte(EncryptKey))
+	if err != nil {
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, token, err)
+	}
+	tokenArr := gstr.Split(string(decryptTokenStr), TokenDelimiter)
+	if len(tokenArr) < 2 {
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, token, err)
+	}
+	userKey, err := gbase64.Decode([]byte(tokenArr[0]))
+	if err != nil {
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, token, err)
+	}
+	return &MyRequestToken{
+		UserKey: string(userKey),
+		Uuid:    tokenArr[1],
+		Token:   token,
+	}, nil
+}
+
+/**
+* getAndFreshCacheToken
+*  @Description: 刷新Token缓存时间
+*  @param userKey
+*  @return *MyCacheToken
+*  @return error
+ */
+func (m *MyToken) getAndFreshCacheToken(ctx context.Context, userKey string) (*MyCacheToken, error) {
+	cacheKey := CacheKeyPrefix + userKey
+	catcheToken, err := m.getCache(ctx, cacheKey)
+	if err != nil {
+		return nil, err
+	}
+	nowTime := gtime.Now().TimestampMilli()
+	//  对缓存时间进行刷新
+	//  cacheToken.NextFreshTime == 0, 表明是一个一次性的token
+	if gconv.Int64(catcheToken.NextFreshTime) == 0 || nowTime > catcheToken.NextFreshTime {
+		catcheToken.CreatedAt = gtime.Now().TimestampMilli()
+		catcheToken.NextFreshTime = gtime.Now().TimestampMilli() + gconv.Int64(CacheMaxRefresh)
+	}
+	return catcheToken, nil
+}
+
+/**
+* GenerateToken
+*  @Description: 生成缓存token
+*  @param useKey 唯一值
+*  @param data 存入Token的信息
+*  @return *MyCacheToken
+*  @return error
+ */
+func (m *MyToken) GenerateToken(ctx context.Context, useKey string, data interface{}) (*MyCacheToken, error) {
+	myRequestToken, err := m.EncryptToken(ctx, useKey)
+	if err != nil {
+		return nil, err
+	}
+	cacheKey := CacheKeyPrefix + useKey
+	nowTime := gtime.Now().TimestampMilli()
+	myCacheToken := &MyCacheToken{
+		Token:         myRequestToken.Token,
+		UserKey:       useKey,
+		Uuid:          myRequestToken.Uuid,
+		UserData:      data,
+		CreatedAt:     nowTime,
+		NextFreshTime: nowTime + gconv.Int64(CacheMaxRefresh),
+	}
+	err = m.setCache(ctx, cacheKey, myCacheToken)
+	if err != nil {
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, err)
+	}
+	return myCacheToken, nil
 }
