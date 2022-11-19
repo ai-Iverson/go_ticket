@@ -11,7 +11,7 @@ database:
 
   default:
     host: "127.0.0.1"
-    port: "3307"
+    port: "3306"
     user: "root"
     pass: "123456"
     name: "go_ticket"
@@ -26,5 +26,16 @@ token:
 # Redis数据库配置
 redis:
   default:
-    address: "172.0.0.1:6379"
+    address: "127.0.0.1:6379"
     db: 0
+
+logger:
+  path: "./log/my-goframe/"
+  file: "{Y-m-d}.log"
+  level: "all"
+  rotateExpire: "1d"  # 一天一个回滚
+  rotateBackupLimit: 7   # 保留7个日志文件
+  writerColorEnable: true  # 日志文件带有颜色
+  RotateBackupCompress: 9  # 日志文件压缩级别，0-9,9最高
+  globalStdout: false  # 自定义key,是否输出到标准输出
+  Flags: 44 #日期 时:分:秒:毫秒 文件:行号

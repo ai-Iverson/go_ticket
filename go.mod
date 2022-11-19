@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.2.3
 	github.com/gogf/gf/v2 v2.2.3
+	github.com/jinzhu/copier v0.3.5
 )
 
 require (
