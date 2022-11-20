@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcache"
+	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/util/gconv"
 	"go_ticket/internal/errorcode"
 	"time"
@@ -97,6 +98,7 @@ func (m *MyToken) RemoveCache(ctx context.Context, cacheKey string) error {
 			return errorcode.NewMyErr(ctx, errorcode.MyInternalError, err)
 		}
 	case CacheModeRedis:
+		glog.Info(ctx, "redis删除键", cacheKey)
 		_, err := g.Redis().Do(ctx, "DEL", cacheKey)
 		if err != nil {
 			return errorcode.NewMyErr(ctx, errorcode.MyInternalError, err)
