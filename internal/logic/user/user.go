@@ -12,6 +12,7 @@ import (
 	"go_ticket/internal/model"
 	"go_ticket/internal/model/entity"
 	"go_ticket/internal/service"
+	"go_ticket/utility/token"
 	"go_ticket/utility/utils"
 )
 
@@ -70,4 +71,25 @@ func (s *sUser) Login(ctx context.Context, in model.UserLoginInput) (out *model.
 	}
 	return
 
+}
+
+func (s *sUser) Logout(ctx context.Context) error {
+	userToken1 := service.Context().Get(ctx)
+	if userToken1 == nil {
+		glog.Error(ctx, " 获取用户请求token失败")
+		return gerror.New("未获取到token信息")
+	}
+	//myRequestToken, err := token.Instance().DecrypToken(ctx, userToken)
+	//if err != nil {
+	//	glog.Error(ctx, "解析Token失败", err)
+	//	return gerror.New("解析token失败")
+	//}
+	glog.Info(ctx, "用户注销：", userToken1)
+	err := token.Instance().RemoveCache(ctx, token.CacheKeyPrefix+userToken1.Token.UserKey)
+	if err != nil {
+		glog.Error(ctx, "删除token失败", err)
+		return gerror.New("用户注销失败")
+	}
+
+	return err
 }

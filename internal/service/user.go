@@ -15,6 +15,7 @@ type IUser interface {
 	EncryptPassword(password string) string
 	GetUserByPassportAndPassword(ctx context.Context, name, password string) (user *entity.User, err error)
 	Login(ctx context.Context, in model.UserLoginInput) (out *model.UserLoginOutput, err error)
+	Logout(ctx context.Context) error
 }
 
 var localUser IUser

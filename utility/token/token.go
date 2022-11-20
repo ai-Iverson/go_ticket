@@ -89,9 +89,27 @@ func GetRequestToken(r *ghttp.Request) (token string, err error) {
 *  @param token
 *  @return MyCacheToken
  */
-//func (m *MyToken) ValidToken(ctx context.Context, token string) *MyCacheToken {
-//
-//}
+func (m *MyToken) ValidToken(ctx context.Context, token string) (myCacheToken *MyCacheToken, err error) {
+	if token == "" {
+		return nil, errorcode.NewMyErr(ctx, errorcode.Unauthorized)
+	}
+
+	decryptToken, err := m.DecrypToken(ctx, token)
+	if err != nil {
+		return nil, errorcode.MyWrapCode(ctx, errorcode.AuthorizedFailed, err)
+	}
+
+	userCache, err := m.getAndFreshCacheToken(ctx, decryptToken.UserKey)
+	if err != nil {
+		return nil, errorcode.MyWrapCode(ctx, errorcode.AuthorizedFailed, err)
+	}
+
+	if decryptToken.Uuid != userCache.Uuid {
+		return nil, errorcode.NewMyErr(ctx, errorcode.AuthorizedFailed)
+	}
+
+	return userCache, nil
+}
 
 /**
 * EncryptToken
@@ -128,7 +146,7 @@ func (m *MyToken) EncryptToken(ctx context.Context, userKey string) (*MyRequestT
 *  @return *MyRequestToken
 *  @return error
  */
-func (m *MyToken) decrypToken(ctx context.Context, token string) (*MyRequestToken, error) {
+func (m *MyToken) DecrypToken(ctx context.Context, token string) (*MyRequestToken, error) {
 	if token == "" {
 		return nil, errorcode.NewMyErr(ctx, errorcode.TokenEmpty)
 	}

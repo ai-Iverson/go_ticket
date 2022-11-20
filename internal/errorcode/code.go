@@ -75,6 +75,7 @@ var (
 	LoginNameConflicted = New(403, 30002, `{#loginNameConflicted}`)
 	PasswordError       = New(401, 30003, `{#passwordError}`)
 	LoginFailed         = New(401, 30004, `{#loginFailed}`)
+	LogoutFailed        = New(401, 30005, `{#logoutFailed}`)
 
 	// 桌面40000起始
 	DesktopNotFound = New(404, 40001, `{#desktopNotExists}`)
