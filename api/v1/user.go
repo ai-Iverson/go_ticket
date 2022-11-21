@@ -7,7 +7,7 @@ import (
 
 type UserGetInfoReq struct {
 	g.Meta `path:"/userinfo" method:"get" summart:"获取用户信息" tags:"获取用户信息"`
-	Userid uint `json:"userid" in:"path"`
+	Id     uint `json:"userid" in:"path"`
 }
 
 type UserGetInfoRes struct {
