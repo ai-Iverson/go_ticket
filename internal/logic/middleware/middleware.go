@@ -85,7 +85,7 @@ func formatResponse(r *ghttp.Request, res interface{}, err error) {
 		//g.Log().Errorf(r.GetCtx(), "%+v", err)
 		response.JsonExit(r, code.Code(), gerror.Current(err).Error()) // 只暴露当前error给调用者
 	} else {
-		response.JsonExit(r, code.Code(), "", res)
+		response.JsonExit(r, code.Code(), "sucess", res)
 	}
 }
 

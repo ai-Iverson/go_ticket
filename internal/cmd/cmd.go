@@ -26,7 +26,6 @@ var (
 				service.Middleware().ResponseHandler,
 			)
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					controller.Hello,
 					controller.Register,
@@ -34,8 +33,7 @@ var (
 				)
 			})
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse,
-					service.Middleware().TokenAuth)
+				group.Middleware(service.Middleware().TokenAuth)
 				group.Bind(
 					controller.Login.Logout,
 				)
