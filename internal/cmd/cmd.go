@@ -38,7 +38,7 @@ var (
 					controller.Login.Logout,
 				)
 			})
-
+			controller.Schedules.Initialize()
 			s.Run()
 			return nil
 		},
