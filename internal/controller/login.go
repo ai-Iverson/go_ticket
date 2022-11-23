@@ -25,6 +25,7 @@ func (l *cLogin) Login(ctx context.Context, req *v1.LoginReq) (res *v1.LoginRes,
 		Password: req.Password,
 	})
 	if err != nil {
+		glog.Info(ctx, req.Name, req.Password)
 		return nil, errorcode.MyWrapCode(ctx, errorcode.LoginFailed, err)
 	}
 	res.User = &v1.UserGetInfoRes{}

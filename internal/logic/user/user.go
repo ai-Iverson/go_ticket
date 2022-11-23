@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/util/gconv"
 	"go_ticket/internal/dao"
+	"go_ticket/internal/errorcode"
 	"go_ticket/internal/model"
 	"go_ticket/internal/model/entity"
 	"go_ticket/internal/service"
@@ -90,6 +91,22 @@ func (s *sUser) Logout(ctx context.Context) error {
 		glog.Error(ctx, "删除token失败", err)
 		return gerror.New("用户注销失败")
 	}
-
 	return err
+}
+
+func (s *sUser) UserList(ctx context.Context, in model.UserListInput) (out *model.UserListOutput, err error) {
+	userList, err := dao.User.Ctx(ctx).All()
+	glog.Info(ctx, "logic获取到用户model返回的list信息: ", userList)
+	if err != nil {
+		glog.Error(ctx, "logic没有获取到用户model list信息", err, userList)
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, err)
+	}
+	out = &model.UserListOutput{}
+	err = userList.Structs(&out.List)
+	if err != nil {
+		glog.Error(ctx, err, userList)
+		return nil, errorcode.NewMyErr(ctx, errorcode.MyInternalError, err)
+	}
+	glog.Info(ctx, "logic获取到用户UserListOutput返回的list信息", err, out)
+	return out, nil
 }

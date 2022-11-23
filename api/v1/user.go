@@ -17,3 +17,11 @@ type UserGetInfoRes struct {
 	CreatedAt *gtime.Time `json:"createdAt" description:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" description:""`
 }
+
+type UserListReq struct {
+	g.Meta `path:"/userlist" method:"post" summart:"获取用户信息" tags:"获取用户信息"`
+}
+
+type UserListRes struct {
+	List []UserGetInfoRes `json:"users" description:"用户列表"`
+}
