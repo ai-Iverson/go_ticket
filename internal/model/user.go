@@ -25,3 +25,9 @@ type UserInfoOutput struct {
 	CreatedAt *gtime.Time
 	UpdatedAt *gtime.Time
 }
+
+type UserListInput struct{}
+
+type UserListOutput struct {
+	List []UserInfoOutput
+}

@@ -9,8 +9,7 @@ import (
 )
 
 type IScheduled interface {
-	GetTicketToken(ctx context.Context) string
-	GetTicketData(ctx context.Context)
+	GenerateKnowledgeJsonFile(ctx context.Context)
 }
 
 var localScheduled IScheduled

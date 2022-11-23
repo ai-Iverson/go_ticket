@@ -20,7 +20,7 @@ var (
 
 			s := g.Server()
 			s.Use(
-				//service.Middleware().MiddlewareCORS,
+				service.Middleware().MiddlewareCORS,
 				service.Middleware().Ctx,
 				service.Middleware().I18NMiddleware,
 				service.Middleware().ResponseHandler,
@@ -36,9 +36,10 @@ var (
 				group.Middleware(service.Middleware().TokenAuth)
 				group.Bind(
 					controller.Login.Logout,
+					controller.User.GetUserList,
 				)
 			})
-			controller.Schedules.Initialize()
+			//controller.Schedules.Initialize()
 			s.Run()
 			return nil
 		},

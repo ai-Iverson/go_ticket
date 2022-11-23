@@ -16,6 +16,7 @@ type IUser interface {
 	GetUserByPassportAndPassword(ctx context.Context, name, password string) (user *entity.User, err error)
 	Login(ctx context.Context, in model.UserLoginInput) (out *model.UserLoginOutput, err error)
 	Logout(ctx context.Context) error
+	UserList(ctx context.Context, in model.UserListInput) (out *model.UserListOutput, err error)
 }
 
 var localUser IUser

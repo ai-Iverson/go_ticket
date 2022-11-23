@@ -19,7 +19,7 @@ func (s *cSchedules) Initialize() error {
 	var xxx = gctx.New()
 	ctx := xxx
 	gcron.New()
-	_, err := gcron.AddSingleton(ctx, "* * * * * *", service.Scheduled().GetTicketData)
+	_, err := gcron.AddSingleton(ctx, "0/2 * * * * ?", service.Scheduled().GenerateKnowledgeJsonFile)
 	if err != nil {
 		return err
 	}

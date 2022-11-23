@@ -7,6 +7,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
 	"go_ticket/internal/service"
+	"os"
 	"strings"
 )
 
@@ -20,7 +21,7 @@ func New() *sScheduled {
 	return &sScheduled{}
 }
 
-func (s *sScheduled) GetTicketToken(ctx context.Context) string {
+func (s *sScheduled) getTicketToken(ctx context.Context) string {
 	r, err := g.Client().Post(
 		ctx,
 		"https://portal-pro.mycyclone.com/api/v1/cas/login",
@@ -40,8 +41,8 @@ func (s *sScheduled) GetTicketToken(ctx context.Context) string {
 	return res["token"].(string)
 }
 
-func (s *sScheduled) GetTicketData(ctx context.Context) {
-	token := s.GetTicketToken(ctx)
+func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]interface{}) {
+	token := s.getTicketToken(ctx)
 	head := map[string]string{
 		"Authorization": "Bearer " + token,
 	}
@@ -49,7 +50,7 @@ func (s *sScheduled) GetTicketData(ctx context.Context) {
 		ctx,
 		"http://ticket.mycyclone.com/api/questions_library?page=1&per_page=10&is_open_state=0&keyword=",
 	)
-	//defer r.Close()
+	defer r.Close()
 	ticketJson := r.ReadAll()
 	res := make(map[string]interface{})
 	_ = json.Unmarshal(ticketJson, &res)
@@ -87,7 +88,7 @@ func (s *sScheduled) GetTicketData(ctx context.Context) {
 			oneData["Title"] = j.(map[string]interface{})["summary"].(string)
 			oneData["PostDate"] = j.(map[string]interface{})["created_at"].(string)
 			oneData["Label"] = j.(map[string]interface{})["problem_lable_info"].([]interface{})[0].(map[string]interface{})["name"].(string)
-			oneData["Keyword"] = j.(map[string]interface{})["created_at"].(string)
+			oneData["Keyword"] = words
 			oneData["code"] = j.(map[string]interface{})["code"].(string)
 
 		} else {
@@ -96,10 +97,35 @@ func (s *sScheduled) GetTicketData(ctx context.Context) {
 			oneData["Title"] = j.(map[string]interface{})["summary"].(string)
 			oneData["PostDate"] = j.(map[string]interface{})["created_at"].(string)
 			oneData["Label"] = j.(map[string]interface{})["problem_lable_info"].([]interface{})[0].(map[string]interface{})["name"].(string)
-			oneData["Keyword"] = j.(map[string]interface{})["created_at"].(string)
+			oneData["Keyword"] = words
 			oneData["code"] = j.(map[string]interface{})["code"].(string)
 		}
 		allData = append(allData, oneData)
 	}
 	fmt.Println(key_word)
+	return key_word, allData
+}
+
+func (s *sScheduled) GenerateKnowledgeJsonFile(ctx context.Context) {
+	keyWord, allData := s.getTicketData(ctx)
+	glog.Info(ctx, keyWord)
+	file, err := os.OpenFile("./keyword.josn", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
+	defer file.Close()
+	encoder := json.NewEncoder(file)
+	err = encoder.Encode(keyWord)
+	if err != nil {
+		glog.Error(ctx, err)
+	}
+	// TODO 文件的路径写在配置文件中
+	file2, err := os.OpenFile("./Knowledge.josn", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
+	defer file.Close()
+	if err != nil {
+		glog.Error(ctx, err)
+	}
+	encoder1 := json.NewEncoder(file2)
+	err = encoder1.Encode(allData)
+	if err != nil {
+		glog.Error(ctx, err)
+	}
+
 }
