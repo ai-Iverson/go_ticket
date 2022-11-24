@@ -17,13 +17,14 @@ type KnowledgeRes struct {
 	UpdatedAt         *gtime.Time `json:"updatedAt"         description:""`
 }
 type KnowledgeListReq struct {
-	g.Meta `path:"/knowledge" method:"get" summart:"获取知识库信息" tags:"获取知识库信息"`
-	Page   int `json:"page" in:"query" description:"分页码"`
-	Size   int `json:"size" in:"query" description:"分页数量"`
+	g.Meta  `path:"/knowledge" method:"get" summart:"获取知识库信息" tags:"获取知识库信息"`
+	Keyword string `json:"keyword" in:"query" description:"关键字"`
+	Page    int    `json:"page" in:"query" description:"分页码"`
+	Size    int    `json:"size" in:"query" description:"分页数量"`
 }
 
 type KnowledgeListRes struct {
-	List  []KnowledgeRes `json:"users" description:"知识库列表"`
+	List  []KnowledgeRes `json:"list" description:"知识库列表"`
 	Page  int            `json:"page" description:"分页码"`
 	Size  int            `json:"size" description:"分页数量"`
 	Total int            `json:"total" description:"数据总数"`
