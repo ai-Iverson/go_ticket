@@ -4,6 +4,6 @@ gfcli:
   gen:
     dao:
       - link: "mysql:root:123456@tcp(127.0.0.1:3307)/go_ticket"
-        tables: "user"
+        tables: "user,knowledge_base"
         descriptionTag: true
         noModelComment: true
