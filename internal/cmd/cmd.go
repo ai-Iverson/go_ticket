@@ -33,7 +33,7 @@ var (
 				)
 			})
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(service.Middleware().TokenAuth)
+				//group.Middleware(service.Middleware().TokenAuth)
 				group.Bind(
 					controller.Login.Logout,
 					controller.User.GetUserList,
