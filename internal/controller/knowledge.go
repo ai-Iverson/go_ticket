@@ -16,11 +16,14 @@ type cKnowledge struct {
 
 func (c *cKnowledge) GetAllKnowledge(ctx context.Context, req *v1.KnowledgeListReq) (res *v1.KnowledgeListRes, err error) {
 	res = &v1.KnowledgeListRes{}
-	glog.Info(ctx, "分页数据定义: ", req.Page, req.Size)
+	glog.Info(ctx, "分页数据定义: ", req.Keyword, req.Page, req.Size)
 	allKnowledgeList, err := service.Knowledge().GetKnowledgeData(ctx, model.KnowledgeListInput{
-		Page: req.Page,
-		Size: req.Size,
+		Keyword: req.Keyword,
+		Page:    req.Page,
+		Size:    req.Size,
 	})
 	utils.MyCopy(ctx, res, allKnowledgeList)
+	glog.Info(ctx, allKnowledgeList)
+	glog.Info(ctx, res)
 	return
 }

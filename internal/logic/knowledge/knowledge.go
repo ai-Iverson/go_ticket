@@ -2,6 +2,7 @@ package knowledge
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/os/glog"
 	v1 "go_ticket/api/v1"
 	"go_ticket/internal/dao"
 	"go_ticket/internal/model"
@@ -23,10 +24,22 @@ func (s *sKnowledge) GetKnowledgeData(ctx context.Context, in model.KnowledgeLis
 	out = &model.KnowledgeListOutput{}
 	out.Page = in.Page
 	out.Size = in.Size
+	glog.Info(ctx, "xxxx", out, in.Keyword)
 	out.List = []v1.KnowledgeRes{}
-	allKnowledge, err := m.Page(in.Page, in.Size).All()
-	out.Total, err = m.Count()
+	glog.Info(ctx, "xxxx", out)
+	if in.Keyword != "" {
+		glog.Info(ctx, "keyword", in.Keyword)
+		likePattern := "%" + in.Keyword + "%"
+		m = m.WhereLike(dao.KnowledgeBase.Columns().FunctionPath, likePattern).
+			WhereLike(dao.KnowledgeBase.Columns().ProblemDesc, likePattern).
+			WhereLike(dao.KnowledgeBase.Columns().Summary, likePattern).
+			WhereLike(dao.KnowledgeBase.Columns().SuggestedSolution, likePattern)
+	}
+	allKnowledge, _ := m.Page(in.Page, in.Size).OrderDesc(dao.KnowledgeBase.Columns().CreatedAt).All()
+	out.Total, _ = m.Count()
 	err = allKnowledge.Structs(&out.List)
+	glog.Info(ctx, allKnowledge)
+
 	return
 
 }
