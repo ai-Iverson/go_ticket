@@ -37,6 +37,7 @@ var (
 				group.Bind(
 					controller.Login.Logout,
 					controller.User.GetUserList,
+					controller.Knowledge.GetAllKnowledge,
 				)
 			})
 			//controller.Schedules.Initialize()
