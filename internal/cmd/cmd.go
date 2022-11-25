@@ -8,6 +8,7 @@ import (
 	"github.com/gogf/gf/v2/os/glog"
 	"go_ticket/internal/controller"
 	"go_ticket/internal/service"
+	"go_ticket/utility/response"
 )
 
 var (
@@ -19,6 +20,12 @@ var (
 			SetLoggerDefaultHandler() // 替代默认的log
 
 			s := g.Server()
+			oai := s.GetOpenApi()
+
+			// OpenApi自定义信息
+			oai.Info.Title = `API Reference`
+			oai.Config.CommonResponse = response.JsonRes{}
+			oai.Config.CommonResponseDataField = `Data`
 			s.Use(
 				service.Middleware().MiddlewareCORS,
 				service.Middleware().Ctx,

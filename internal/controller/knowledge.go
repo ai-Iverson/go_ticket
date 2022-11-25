@@ -23,7 +23,5 @@ func (c *cKnowledge) GetAllKnowledge(ctx context.Context, req *v1.KnowledgeListR
 		Size:    req.Size,
 	})
 	utils.MyCopy(ctx, res, allKnowledgeList)
-	glog.Info(ctx, allKnowledgeList)
-	glog.Info(ctx, res)
 	return
 }

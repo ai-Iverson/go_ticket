@@ -30,10 +30,11 @@ func (s *sKnowledge) GetKnowledgeData(ctx context.Context, in model.KnowledgeLis
 	if in.Keyword != "" {
 		glog.Info(ctx, "keyword", in.Keyword)
 		likePattern := "%" + in.Keyword + "%"
-		m = m.WhereLike(dao.KnowledgeBase.Columns().FunctionPath, likePattern).
-			WhereLike(dao.KnowledgeBase.Columns().ProblemDesc, likePattern).
-			WhereLike(dao.KnowledgeBase.Columns().Summary, likePattern).
-			WhereLike(dao.KnowledgeBase.Columns().SuggestedSolution, likePattern)
+		m = m.WhereOrLike(dao.KnowledgeBase.Columns().FunctionPath, likePattern).
+			WhereOrLike(dao.KnowledgeBase.Columns().ProblemDesc, likePattern).
+			WhereOrLike(dao.KnowledgeBase.Columns().Summary, likePattern).
+			WhereOrLike(dao.KnowledgeBase.Columns().SuggestedSolution, likePattern)
+		glog.Info(ctx, m)
 	}
 	allKnowledge, _ := m.Page(in.Page, in.Size).OrderDesc(dao.KnowledgeBase.Columns().CreatedAt).All()
 	out.Total, _ = m.Count()
