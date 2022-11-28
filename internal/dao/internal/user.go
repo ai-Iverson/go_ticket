@@ -26,6 +26,8 @@ type UserColumns struct {
 	IsDelete  string //
 	CreatedAt string //
 	UpdatedAt string //
+	IsAdmin   string //
+	RoleId    string //
 }
 
 //  userColumns holds the columns for table user.
@@ -36,6 +38,8 @@ var userColumns = UserColumns{
 	IsDelete:  "is_delete",
 	CreatedAt: "createdAt",
 	UpdatedAt: "UpdatedAt",
+	IsAdmin:   "is_admin",
+	RoleId:    "role_id",
 }
 
 // NewUserDao creates and returns a new DAO object for table data access.

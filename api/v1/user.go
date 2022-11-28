@@ -13,6 +13,8 @@ type UserGetInfoReq struct {
 type UserGetInfoRes struct {
 	Id        int         `json:"userid"`
 	Name      string      `json:"name"`
+	IsAdmin   int         `json:"is_amdin"`
+	RoleId    int         `json:"role_id"`
 	IsDelete  int         `json:"isDelete"  description:""`
 	CreatedAt *gtime.Time `json:"createdAt" description:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" description:""`
