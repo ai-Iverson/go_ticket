@@ -16,4 +16,6 @@ type User struct {
 	IsDelete  int         `json:"isDelete"  description:""`
 	CreatedAt *gtime.Time `json:"createdAt" description:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" description:""`
+	IsAdmin   int         `json:"isAdmin"   description:""`
+	RoleId    int         `json:"roleId"    description:""`
 }

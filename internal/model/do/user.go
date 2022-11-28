@@ -18,4 +18,6 @@ type User struct {
 	IsDelete  interface{} //
 	CreatedAt *gtime.Time //
 	UpdatedAt *gtime.Time //
+	IsAdmin   interface{} //
+	RoleId    interface{} //
 }

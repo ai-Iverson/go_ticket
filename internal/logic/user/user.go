@@ -29,15 +29,40 @@ func New() *sUser {
 }
 
 func (s *sUser) Register(ctx context.Context, in model.UserRegisterInput) error {
+	glog.Info(ctx, "注册输入内容:", in)
 	return dao.User.Transaction(ctx, func(ctx context.Context, tx *gdb.TX) error {
 		var user *entity.User
 		if err := gconv.Struct(in, &user); err != nil {
 			return err
 		}
+		// 判断用户是否已经存在
+		err := s.CheckUsernameUnique(ctx, in.Name)
+		if err != nil {
+			return err
+		}
 		user.Password = s.EncryptPassword(user.Password)
-		_, err := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
+		_, err = dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
 		return err
 	})
+}
+
+/**
+* CheckUsernameUnique
+*  @Description: 检测用户名是否存在
+*  @receiver s
+*  @param ctx
+*  @param name
+*  @return error
+ */
+func (s *sUser) CheckUsernameUnique(ctx context.Context, name string) error {
+	n, err := dao.User.Ctx(ctx).Where(dao.User.Columns().Name, name).Count()
+	if err != nil {
+		return err
+	}
+	if n > 0 {
+		return gerror.Newf(`用户"%s"已被占用`, name)
+	}
+	return nil
 }
 
 // EncryptPassword 密码进行加密
