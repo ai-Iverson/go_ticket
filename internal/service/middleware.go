@@ -14,6 +14,7 @@ type IMiddleware interface {
 	MiddlewareCORS(r *ghttp.Request)
 	Ctx(r *ghttp.Request)
 	TokenAuth(r *ghttp.Request)
+	ApiAuth(r *ghttp.Request)
 }
 
 var localMiddleware IMiddleware

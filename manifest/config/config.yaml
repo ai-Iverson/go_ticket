@@ -7,16 +7,11 @@ server:
 database:
   logger:
     level: "all"
-    stdout: true
-
   default:
-    host: "127.0.0.1"
-    port: "3307"
-    user: "root"
-    pass: "123456"
-    name: "go_ticket"
-    type: "mysql"
+    link: "mysql:root:123456@tcp(127.0.0.1:3307)/go_ticket"
+    debug: true
     updatedAt: "updated_at"
+
 
 token:
   timeout: 600000  # 单位：毫秒,10分钟

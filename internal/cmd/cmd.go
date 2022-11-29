@@ -7,6 +7,7 @@ import (
 	"github.com/gogf/gf/v2/os/gcmd"
 	"github.com/gogf/gf/v2/os/glog"
 	"go_ticket/internal/controller"
+	"go_ticket/internal/library/casbin"
 	"go_ticket/internal/service"
 	"go_ticket/utility/response"
 )
@@ -21,6 +22,7 @@ var (
 
 			s := g.Server()
 			oai := s.GetOpenApi()
+			casbin.InitEnforcer(ctx)
 
 			// OpenApi自定义信息
 			oai.Info.Title = `API Reference`
@@ -40,7 +42,8 @@ var (
 				)
 			})
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				//group.Middleware(service.Middleware().TokenAuth)
+				group.Middleware(service.Middleware().TokenAuth)
+				group.Middleware(service.Middleware().ApiAuth)
 				group.Bind(
 					controller.Login.Logout,
 					controller.User.GetUserList,
