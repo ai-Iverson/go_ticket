@@ -68,7 +68,8 @@ func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]
 			for _, i := range word {
 				q := strings.Replace(i, "【", "", -1)
 				w := strings.Replace(q, "】", "", -1)
-				words = w
+				s := strings.TrimSpace(w)
+				words = s
 				if words != "" {
 					key_word = append(key_word, words)
 				}
@@ -76,7 +77,8 @@ func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]
 			}
 		} else {
 			q := strings.Replace(function_path, "【", "", -1)
-			words = strings.Replace(q, "】", "", -1)
+			s := strings.Replace(q, "】", "", -1)
+			words = strings.TrimSpace(s)
 			if words != "" {
 				key_word = append(key_word, words)
 			}
@@ -108,14 +110,18 @@ func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]
 
 func (s *sScheduled) GenerateKnowledgeJsonFile(ctx context.Context) {
 	keyWord, allData := s.getTicketData(ctx)
-	glog.Info(ctx, keyWord)
+	// 去重
+	keyWords := removeDuplicateElement(keyWord)
+	glog.Info(ctx, keyWords)
+
 	file, err := os.OpenFile("./keyword.josn", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
 	defer file.Close()
 	encoder := json.NewEncoder(file)
-	err = encoder.Encode(keyWord)
+	err = encoder.Encode(keyWords)
 	if err != nil {
 		glog.Error(ctx, err)
 	}
+
 	// TODO 文件的路径写在配置文件中
 	file2, err := os.OpenFile("./Knowledge.josn", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
 	defer file.Close()
@@ -123,9 +129,25 @@ func (s *sScheduled) GenerateKnowledgeJsonFile(ctx context.Context) {
 		glog.Error(ctx, err)
 	}
 	encoder1 := json.NewEncoder(file2)
+	// https://learnku.com/articles/58053
+	// json.Marshal() 在进行序列化时，会进行 HTMLEscape 编码，会将 “<”, “>”, “&”, U+2028, 及 U+2029 转码成 “\u003c”,”\u003e”, “\u0026”, “\u2028”, 和 “\u2029”
+	encoder1.SetEscapeHTML(false)
 	err = encoder1.Encode(allData)
 	if err != nil {
 		glog.Error(ctx, err)
 	}
 
+}
+
+// 字符串切片去重
+func removeDuplicateElement(languages []string) []string {
+	result := make([]string, 0, len(languages))
+	temp := map[string]struct{}{}
+	for _, item := range languages {
+		if _, ok := temp[item]; !ok { //如果字典中找不到元素，ok=false，!ok为true，就往切片中append元素。
+			temp[item] = struct{}{}
+			result = append(result, item)
+		}
+	}
+	return result
 }

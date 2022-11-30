@@ -50,7 +50,7 @@ var (
 					controller.Knowledge.GetAllKnowledge,
 				)
 			})
-			//controller.Schedules.Initialize()
+			controller.Schedules.Initialize()
 			s.Run()
 			return nil
 		},
