@@ -8,7 +8,7 @@ database:
   logger:
     level: "all"
   default:
-    link: "mysql:root:123456@tcp(127.0.0.1:3307)/go_ticket"
+    link: "mysql:root:123456@tcp(127.0.0.1:3306)/go_ticket"
     debug: true
     updatedAt: "updated_at"
 
