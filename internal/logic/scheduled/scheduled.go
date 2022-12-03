@@ -48,7 +48,7 @@ func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]
 	}
 	r, _ := g.Client().Header(head).Get(
 		ctx,
-		"http://ticket.mycyclone.com/api/questions_library?page=1&per_page=10&is_open_state=0&keyword=",
+		"http://ticket.mycyclone.com/api/questions_library?page=1&per_page=5000&is_open_state=0&keyword=",
 	)
 	defer r.Close()
 	ticketJson := r.ReadAll()

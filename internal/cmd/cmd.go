@@ -23,6 +23,13 @@ var (
 			s := g.Server()
 			oai := s.GetOpenApi()
 			casbin.InitEnforcer(ctx)
+			// 错误状态码接管
+			s.BindStatusHandler(404, func(r *ghttp.Request) {
+				r.Response.Writeln("404 - 你似乎来到了没有知识存在的荒原…")
+			})
+			s.BindStatusHandler(403, func(r *ghttp.Request) {
+				r.Response.Writeln("403 - 网站拒绝显示此网页")
+			})
 
 			// OpenApi自定义信息
 			oai.Info.Title = `API Reference`
@@ -50,7 +57,7 @@ var (
 					controller.Knowledge.GetAllKnowledge,
 				)
 			})
-			controller.Schedules.Initialize()
+			//controller.Schedules.Initialize()
 			s.Run()
 			return nil
 		},
