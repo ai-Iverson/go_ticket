@@ -58,6 +58,7 @@ var (
 				)
 			})
 			//controller.Schedules.Initialize()
+			service.Cron().StartCron(ctx)
 			s.Run()
 			return nil
 		},

@@ -4,8 +4,12 @@
 
 package service
 
+import (
+	"context"
+)
+
 type ICron interface {
-	StartCron()
+	StartCron(ctx context.Context)
 }
 
 var localCron ICron
