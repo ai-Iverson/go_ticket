@@ -19,7 +19,7 @@ var (
 		Test,  // 测试无参数任务
 		Test2, // 测试有参数任务
 	}
-	inst = new(tasks)
+	Inst = new(tasks)
 )
 
 type cronStrategy interface {
@@ -44,7 +44,7 @@ type TaskItem struct {
 
 func init() {
 	for _, cron := range cronList {
-		inst.Add(&TaskItem{
+		Inst.Add(&TaskItem{
 			Name: cron.GetName(),
 			Fun:  cron.Execute,
 		})
@@ -65,7 +65,7 @@ func StartALL(sysCron []*entity.Cron) error {
 	}
 
 	for _, cron := range sysCron {
-		f := inst.Get(cron.Name)
+		f := Inst.Get(cron.Name)
 		if f == nil {
 			return gerror.Newf("该任务没有加入任务列表:%v", cron.Name)
 		}
