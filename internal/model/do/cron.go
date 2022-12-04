@@ -13,14 +13,15 @@ import (
 type Cron struct {
 	g.Meta    `orm:"table:cron, do:true"`
 	Id        interface{} // 主键
-	Name      interface{} // 任务名称
+	Name      interface{} // 任务名称(唯一)
+	Func      interface{} // 调用的函数名称
 	Params    interface{} // 函数参数
 	Pattern   interface{} // 定时表达式
 	Policy    interface{} // 策略
 	Count     interface{} // 执行次数
 	Sort      interface{} // 排序
 	Remark    interface{} // 备注
-	Status    interface{} // 状态
 	CreatedAt *gtime.Time // 创建时间
 	UpdatedAt *gtime.Time // 更新时间
+	Status    interface{} // 状态
 }

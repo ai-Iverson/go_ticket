@@ -6,10 +6,12 @@ package service
 
 import (
 	"context"
+	"go_ticket/internal/model"
 )
 
 type ICron interface {
 	StartCron(ctx context.Context)
+	AddCronTask(ctx context.Context, in model.AddCronTaskInput) (err error)
 }
 
 var localCron ICron

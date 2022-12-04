@@ -11,14 +11,15 @@ import (
 // Cron is the golang structure for table cron.
 type Cron struct {
 	Id        int64       `json:"id"        description:"主键"`
-	Name      string      `json:"name"      description:"任务名称"`
+	Name      string      `json:"name"      description:"任务名称(唯一)"`
+	Func      string      `json:"func"      description:"调用的函数名称"`
 	Params    string      `json:"params"    description:"函数参数"`
 	Pattern   string      `json:"pattern"   description:"定时表达式"`
 	Policy    int64       `json:"policy"    description:"策略"`
 	Count     int64       `json:"count"     description:"执行次数"`
 	Sort      int         `json:"sort"      description:"排序"`
 	Remark    string      `json:"remark"    description:"备注"`
-	Status    int         `json:"status"    description:"状态"`
 	CreatedAt *gtime.Time `json:"createdAt" description:"创建时间"`
 	UpdatedAt *gtime.Time `json:"updatedAt" description:"更新时间"`
+	Status    int         `json:"status"    description:"状态"`
 }

@@ -21,31 +21,33 @@ type CronDao struct {
 // CronColumns defines and stores column names for table cron.
 type CronColumns struct {
 	Id        string // 主键
-	Name      string // 任务名称
+	Name      string // 任务名称(唯一)
+	Func      string // 调用的函数名称
 	Params    string // 函数参数
 	Pattern   string // 定时表达式
 	Policy    string // 策略
 	Count     string // 执行次数
 	Sort      string // 排序
 	Remark    string // 备注
-	Status    string // 状态
 	CreatedAt string // 创建时间
 	UpdatedAt string // 更新时间
+	Status    string // 状态
 }
 
 //  cronColumns holds the columns for table cron.
 var cronColumns = CronColumns{
 	Id:        "id",
 	Name:      "name",
+	Func:      "func",
 	Params:    "params",
 	Pattern:   "pattern",
 	Policy:    "policy",
 	Count:     "count",
 	Sort:      "sort",
 	Remark:    "remark",
-	Status:    "status",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
+	Status:    "status",
 }
 
 // NewCronDao creates and returns a new DAO object for table data access.
