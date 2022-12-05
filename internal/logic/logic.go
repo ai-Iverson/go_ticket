@@ -6,6 +6,5 @@ import (
 	_ "go_ticket/internal/logic/cron"
 	_ "go_ticket/internal/logic/knowledge"
 	_ "go_ticket/internal/logic/middleware"
-	_ "go_ticket/internal/logic/scheduled"
 	_ "go_ticket/internal/logic/user"
 )
