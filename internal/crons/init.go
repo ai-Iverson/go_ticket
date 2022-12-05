@@ -18,6 +18,7 @@ var (
 	cronList = []cronStrategy{
 		Test,  // 测试无参数任务
 		Test2, // 测试有参数任务
+		GetKnowledgeJson,
 	}
 	Inst = new(tasks)
 )

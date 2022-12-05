@@ -1,4 +1,4 @@
-package scheduled
+package crons
 
 import (
 	"context"
@@ -6,22 +6,28 @@ import (
 	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
-	"go_ticket/internal/service"
 	"os"
 	"strings"
+	"time"
 )
 
-type sScheduled struct{}
+var GetKnowledgeJson = &cGetKnowledgeJson{name: "getknowledgejson"}
 
-func init() {
-	service.RegisterScheduled(New())
+type cGetKnowledgeJson struct {
+	name string
 }
 
-func New() *sScheduled {
-	return &sScheduled{}
+func (c *cGetKnowledgeJson) GetName() string {
+	return c.name
 }
 
-func (s *sScheduled) getTicketToken(ctx context.Context) string {
+// Execute 执行任务
+func (c *cGetKnowledgeJson) Execute(ctx context.Context) {
+	c.GenerateKnowledgeJsonFile(ctx)
+	g.Log().Infof(ctx, "cron GetKnowledgeJson Execute:%v", time.Now())
+}
+
+func (c *cGetKnowledgeJson) getTicketToken(ctx context.Context) string {
 	r, err := g.Client().Post(
 		ctx,
 		"https://portal-pro.mycyclone.com/api/v1/cas/login",
@@ -41,8 +47,8 @@ func (s *sScheduled) getTicketToken(ctx context.Context) string {
 	return res["token"].(string)
 }
 
-func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]interface{}) {
-	token := s.getTicketToken(ctx)
+func (c *cGetKnowledgeJson) getTicketData(ctx context.Context) ([]string, []map[string]interface{}) {
+	token := c.getTicketToken(ctx)
 	head := map[string]string{
 		"Authorization": "Bearer " + token,
 	}
@@ -108,8 +114,8 @@ func (s *sScheduled) getTicketData(ctx context.Context) ([]string, []map[string]
 	return key_word, allData
 }
 
-func (s *sScheduled) GenerateKnowledgeJsonFile(ctx context.Context) {
-	keyWord, allData := s.getTicketData(ctx)
+func (c *cGetKnowledgeJson) GenerateKnowledgeJsonFile(ctx context.Context) {
+	keyWord, allData := c.getTicketData(ctx)
 	// 去重
 	keyWords := removeDuplicateElement(keyWord)
 	glog.Info(ctx, keyWords)
