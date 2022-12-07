@@ -3,7 +3,7 @@
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/go_ticket"
+      - link: "mysql:root:123456@tcp(127.0.0.1:3307)/go_ticket"
         tables:
         descriptionTag: true
         noModelComment: true

@@ -14,7 +14,7 @@ database:
 
 
 token:
-  timeout: 600000  # 单位：毫秒,10分钟
+  timeout: 6000000  # 单位：毫秒,10分钟
   cacheMode: 2  # 使用的缓存模式，1为内存模式，2为redis模式，默认为1
 
 
