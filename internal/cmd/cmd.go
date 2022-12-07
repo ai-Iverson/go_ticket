@@ -49,13 +49,14 @@ var (
 				)
 			})
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				//group.Middleware(service.Middleware().TokenAuth)
+				group.Middleware(service.Middleware().TokenAuth)
 				//group.Middleware(service.Middleware().ApiAuth)
 				group.Bind(
 					controller.Login.Logout,
 					controller.User.GetUserList,
 					controller.Knowledge.GetAllKnowledge,
 					controller.Cron.AddCronTaskReq,
+					controller.Ticket.CreateTicket,
 				)
 			})
 			//controller.Schedules.Initialize()
